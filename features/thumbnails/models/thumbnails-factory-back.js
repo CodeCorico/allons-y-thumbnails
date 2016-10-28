@@ -39,7 +39,7 @@ module.exports = function() {
     }
 
     function _resize(options, filePath, file, outputExt, size, callback, exists) {
-      var newFile = filePath + '-' + size.width + 'x' + size.height + '.' + outputExt;
+      var newFile = filePath + '-' + size.width + 'x' + size.height + '.' + (size.rounded ? 'png' : outputExt);
 
       if (!options.overwrite && exists !== false) {
         fs.lstat(path.join(size.path || file.path, newFile), function(err) {
@@ -57,20 +57,32 @@ module.exports = function() {
         return;
       }
 
-      var sizePath = path.join(size.path || file.path, newFile);
+      var sizePath = path.join(size.path || file.path, newFile),
+          instance = sharp(path.join(file.path, file.file)).resize(size.width, size.height);
 
-      sharp(path.join(file.path, file.file))
-        .resize(size.width, size.height)
-        .toFile(sizePath, function(err) {
-          if (err) {
-            size.err = err;
-          }
-          else {
-            size.result = newFile;
-          }
-
-          callback();
+      if (size.rounded) {
+        instance.overlayWith(new Buffer([
+          '<svg>',
+            '<rect x="0" y="0" ',
+              'width="', size.width, '" height="' + size.height + '" ',
+              'rx="' + (size.width / 2) + '" ry="' + (size.height / 2) + '"',
+            '/>',
+          '</svg>'
+        ].join('')), {
+          cutout: true
         });
+      }
+
+      instance.toFile(sizePath, function(err) {
+        if (err) {
+          size.err = err;
+        }
+        else {
+          size.result = newFile;
+        }
+
+        callback();
+      });
     }
 
     return function thumbnailsFactory(files, options, callback) {
