@@ -103,7 +103,7 @@ module.exports = function() {
         }
 
         var extLower = ext.toLowerCase(),
-            outputExt = extLower == 'gif' ? 'png' : ext;
+            outputExt = extLower == 'gif' ? 'png' : extLower;
 
         async.mapSeries(file.sizes, function(size, nextSize) {
           if (!options.resizeGif && extLower == 'gif') {
