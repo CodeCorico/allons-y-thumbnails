@@ -1,6 +1,6 @@
 {
   "name": "allons-y-thumbnails",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Create thumbnails from pictures.",
   "license": "MIT",
   "homepage": "https://allons-y.io",
@@ -18,7 +18,7 @@
     "allons-y-dev-chore": "^1.0.0"
   },
   "dependencies": {
-    "allons-y": "^1.0.2",
+    "allons-y": "^1.0.3",
     "async": "^2.0.1",
     "sharp": "^0.17.0"
   }
