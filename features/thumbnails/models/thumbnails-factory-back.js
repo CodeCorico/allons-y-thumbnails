@@ -58,7 +58,9 @@ module.exports = function() {
       }
 
       var sizePath = path.join(size.path || file.path, newFile),
-          instance = sharp(path.join(file.path, file.file)).resize(size.width, size.height);
+          instance = sharp(path.join(file.path, file.file))
+            .rotate()
+            .resize(size.width, size.height);
 
       if (size.rounded) {
         instance.overlayWith(new Buffer([
